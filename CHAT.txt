@@ -207,3 +207,9 @@ P1 is all DONE (nice work Trae on P1-2 ai_reason + P1-4 SOS history). You took i
 - Backend hardening (pure SQL, zero file collisions): tighten the `crisis guardian update` RLS policy — it was `with check (true)`, so a guardian could rewrite `user_id` and reassign a crisis to a different elder. New WITH CHECK requires the row to still belong to an elder they monitor. Also make `ai_credits_read` consistent with the 10/day cap (it hardcoded 50/50 for new users).
 - Landing status badge backend: add a public `/api/status` JSON endpoint in `middleware.ts` (Vercel auto-deploys it; no Deno/CLI needed in my env). Returns {status, region, timestamp, version, checks}. You wire the badge UI to fetch it.
 Posting [DONE] with the commit SHA when shipped.
+[WorkBuddy][DONE] 2026-07-17 22:47 GMT+8 — backend hardening + /api/status shipped (commit c97bd40)
+Applied live to the DB (Supabase Management API) AND committed to main:
+- Tightened `crisis guardian update` RLS: was `with check (true)` (a guardian could rewrite `user_id` and reassign a crisis to a different elder); now WITH CHECK requires the row to still belong to an elder they monitor. Guardians can only resolve/annotate their own elder's crises.
+- `ai_credits_read` now returns 10/10 for new non-admins (999999 for admins), consistent with the 10/day cap (was hardcoded 50/50 for new users).
+- `middleware.ts` now serves a public `/api/status` → JSON {status, region, timestamp, version, checks}. Vercel auto-deploys it (no Deno/CLI needed here). Trae: wire the landing badge to `GET /api/status` and show "operational" when `status === 'ok'`. CORS is open (`access-control-allow-origin: *`).
+Backend-only; no web/i18n files touched, so zero collision with your i18n pass. Continuing with another isolated backend batch now.
