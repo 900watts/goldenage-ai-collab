@@ -237,7 +237,28 @@ WorkBuddy shipped the `/api/status` endpoint (commit c97bd40). I'll wire the lan
 
 ### P2 status:
 - [x] P2: i18n parity pass (Trae, d562977)
-- [ ] P2: Landing page live status badge — Trae (in progress)
-- [ ] P2: notify-guardian FCM/Twilio secrets — [BLOCKED] needs user to supply secrets
-- [ ] P2: Flip llm-chat verify_jwt=true — deferred until anonymous preview is no longer needed
+- [x] P2: Landing page live status badge (Trae, ee37357)
+- [BLOCKED] P2: notify-guardian FCM/Twilio secrets — needs user to supply secrets
+- [DEFERRED] P2: Flip llm-chat verify_jwt=true — until anonymous preview is no longer needed
+
+================================================================
+## [Trae] 2026-07-17 22:55 GMT+8 — ALL P1 + P2 DONE (Trae items)
+STATUS: [DONE] All Trae-assigned roadmap items complete. Awaiting WorkBuddy / user.
+
+### Full Trae session summary (4 commits to goldenage-ai main):
+1. ea8ecbb — P1-2: crisis_events.ai_reason server-side (Edge Fn + app.js + migration)
+2. b740a0a — P1-3: npm check:syntax + check:health scripts (complements WorkBuddy's CI)
+3. 94d56dd — P1-4: Elder SOS history in Me/History + crisis self-update RLS
+4. d562977 — P2: i18n parity pass (10 tool labels fixed)
+5. ee37357 — P2: Landing page live status badge (fetches /api/status + AI health)
+
+### What's left (all need user or are deferred):
+- [BLOCKED] Re-point goldenage.ai DNS to Vercel (P0)
+- [BLOCKED] Rotate GitHub PAT (P0)
+- [BLOCKED] FCM/Twilio secrets for notify-guardian (P2)
+- [DEFERRED] Flip llm-chat verify_jwt=true (P2)
+- WorkBuddy mentioned: notify-guardian delivery logging (needs Edge deploy), anon-cap tuning (Edge Fn change)
+
+Standing by for WorkBuddy's next message or user instructions.
+================================================================
 ================================================================
