@@ -1,0 +1,73 @@
+# GoldenAge AI — Cross-Agent Collaboration Log
+# Channel: 900watts/goldenage-ai-collab  (the "another repo" for WorkBuddy <-> Trae Work)
+# Protocol: PROTOCOL.md. Append-only. Tag [WorkBuddy] / [Trae]. Status: [TASK]/[PROGRESS]/[DONE]/[BLOCKED]/[QUESTION].
+
+================================================================
+## [WorkBuddy] 2026-07-17 22:10 GMT+8 — SESSION OPEN / HANDOFF PRIMER
+STATUS: [TASK] establish shared plan + first enhancement batch; Trae to continue.
+
+### What this project is
+GoldenAge AI (repo `900watts/goldenage-ai`): an elder-care web app (+ Flutter/Capacitor mobile + Dart "Management app") with:
+- AI companion/guardian chat (SiliconFlow Qwen3-8B via Supabase Edge Function `llm-chat`)
+- Anti-scam SMS/link checker (LLM-routed, no regex fallback)
+- Guardian<->Elder pairing + emergency SOS with a live red-flash alert + sound in the guardian's management app
+- Per-user AI agent with `soul.md` + memory (auto-capture + REM-style soul refine)
+- Token-based AI credits (10/day for users, admins exempt)
+- Hosting: Vercel static (auto-deploys from GitHub `main`) + Supabase (Postgres+RLS+Realtime+Edge Functions)
+
+### Verified current state (2026-07-17)
+- Web app: deployed to Vercel prod via git-push auto-deploy. `app.js` has admin badge, 10/day cap, SOS->crisis_events, server-side intent router (EMERGENCY/SCAM/FEATURE/GENERAL).
+- Edge Function `llm-chat`: live, `verify_jwt=false` (keeps anonymous landing-page preview). Anonymous cap = 1/day. `scam_check` is free (no credit). `guardian_summary` action works for protector agents.
+- DB (project `exvlolipycabnqiaptib`): `profiles.is_admin` (Watts=true, 67=false), `ai_credits` default 10, `guardians` link fixed (`link_my_guardian` + `pair_with_elder`), `chat_history` table, `crisis_events.ai_reason` column EXISTS but is UNUSED since Trae's commit was reverted.
+- Vercel `middleware.ts` blocks IP `216.236.45.165` -> `/banned.html`, BUT only enforces if `goldenage.ai` DNS points to Vercel. Currently the domain serves a parking page — USER ACTION NEEDED.
+- Flutter: TWO `GuardianScreen` classes exist (`lib/features/guardian/guardian_screen.dart` = live/router-imported; `lib/screens/guardian/guardian_screen.dart` = Trae's dead rewrite, no import path -> build-collision landmine).
+
+### Shared roadmap (FABLE 5 blindspot scan — prioritized)
+P0 (USER-blocked — flag, do not burn cycles):
+- [ ] Re-point `goldenage.ai` DNS to Vercel (else middleware + domain are dead). USER.
+- [ ] Rotate the GitHub PAT (currently embedded in the local git remote URL — credential leak). USER.
+P1 (high value, safe):
+- [ ] Flutter: delete the dead `lib/screens/guardian/guardian_screen.dart`; merge `aiReason` display into the live banner. [claimed by WorkBuddy]
+- [ ] Edge: populate `crisis_events.ai_reason` on elder-initiated SOS (richer guardian context). Needs app.js + Edge Function + (optionally) Flutter.
+- [ ] Add minimal automated smoke checks: `node --check` on client files + a curl health script for `llm-chat`.
+P2 (nice-to-have):
+- [ ] i18n completeness pass (zh/en parity).
+- [ ] Landing page: add a real screenshot / live status badge.
+- [ ] `notify-guardian`: add FCM/Twilio secrets for real SMS push (USER provides secrets).
+- [ ] Flip `llm-chat` `verify_jwt=true` once the anonymous preview is no longer needed.
+
+### This pass (WorkBuddy, 2026-07-17)
+- Created this collab repo + PROTOCOL.md.
+- Flutter: deleting the dead `GuardianScreen`; merging `aiReason` into the live banner (P1). Commit to `goldenage-ai` main.
+- Wrote `ROADMAP.md` into `goldenage-ai`.
+- Web/Edge left as-is this pass to avoid unattended regressions; will resume next session.
+
+### Handoff to Trae Work
+Trae — please:
+1. Read `900watts/goldenage-ai` (main) + this `CHAT.txt` + `PROTOCOL.md`.
+2. Pick the next unclaimed `[ ]` item from P1 above (not claimed by WorkBuddy).
+3. Implement, commit to `goldenage-ai` main (or branch + PR), then APPEND a `[Trae]` message here with what you did + status + commit SHA.
+4. If you hit a blocker needing the user (DNS / PAT / secrets / device), mark `[BLOCKED]` and state it; do NOT loop on it.
+5. When all P1 items are `[DONE]`, move to P2. When everything is `[DONE]` (or the user says stop), mark the session `[DONE]`.
+WorkBuddy resumes on its next session, reads your messages here, and continues. We coordinate ONLY through this file.
+
+### Prompt the user pastes into Trae (also handed to the user separately):
+See the block at the end of this message.
+================================================================
+
+----------------------------
+PROMPT FOR THE USER -> TRAE WORK
+----------------------------
+You are coordinating with another AI agent (WorkBuddy) on the GoldenAge AI project.
+Read the GitHub repo `900watts/goldenage-ai` (main branch) to understand the code.
+Then read the collaboration channel repo `900watts/goldenage-ai-collab`:
+  - `PROTOCOL.md` (how we talk)
+  - `CHAT.txt` (the running log — WorkBuddy just opened a session and left a handoff primer + a prioritized roadmap)
+Your job:
+  1. Follow PROTOCOL.md exactly (append-only, tag [Trae], include a status line).
+  2. Pick the next unclaimed item from the P1 section of the roadmap in CHAT.txt that WorkBuddy did NOT claim.
+  3. Implement it in `900watts/goldenage-ai`, commit to main (or a branch + open a PR), and append a [Trae] message to CHAT.txt describing what you did, the status, and the commit SHA.
+  4. If an item needs the user (DNS re-point, rotating the GitHub PAT, supplying FCM/Twilio secrets, or a physical device), mark it [BLOCKED] and clearly state what the user must do — do not burn cycles on it.
+  5. When all P1 items are done, continue to P2. When everything is done or the user says stop, mark the session [DONE].
+WorkBuddy will read your CHAT.txt messages on its next run and keep going. Coordinate only through that file. Do not modify this collab repo except by appending to CHAT.txt and (if needed) updating the claimed markers in the roadmap copy inside CHAT.txt.
+----------------------------
