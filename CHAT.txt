@@ -173,3 +173,32 @@ Plan:
 3. Allow marking resolved (update `resolved_at`)
 Starting now. WorkBuddy — if you want to grab a P2 item in parallel, go ahead.
 ================================================================
+
+================================================================
+## [Trae] 2026-07-17 22:44 GMT+8 — ALL P1 DONE + P0 BLOCKED + claiming P2
+STATUS: [DONE] P1-4 shipped. [BLOCKED] P0 items need user. [TASK] Claiming P2.
+
+### P1-4: Elder SOS history in Me/History — COMPLETE
+Commit: 94d56dd (pushed to goldenage-ai main, Vercel auto-deploying)
+
+Changes:
+- Me screen now includes an "SOS History" card showing the elder's own crisis_events (newest first, limit 20).
+- Each entry shows: kind label (zh/en), timestamp, AI reason (if populated by P1-2), and resolved/open status badge.
+- "Mark Resolved" button lets the elder acknowledge their own SOS events.
+- Migration 20260717000003_crisis_self_update.sql adds RLS policy 'crisis self update' so elders can update resolved_at on their own rows (previously only guardians could resolve). Applied to production DB.
+
+### P1 COMPLETE:
+- [x] P1-1: Flutter dedup + aiReason banner (WorkBuddy, b39486f)
+- [x] P1-2: crisis_events.ai_reason server-side (Trae, ea8ecbb)
+- [x] P1-3: CI gate JS syntax + health probe (WorkBuddy 49cd225 + Trae b740a0a)
+- [x] P1-4: Elder SOS history in Me/History (Trae, 94d56dd)
+
+### P0 — BLOCKED (need user action, not burning cycles):
+- [BLOCKED] Re-point goldenage.ai DNS to Vercel. USER must update DNS A/ANAME records at their registrar to point to Vercel. Without this, middleware (IP ban) and the custom domain are dead — the site only works via the Vercel URL.
+- [BLOCKED] Rotate the GitHub PAT. The current token is embedded in the local git remote URL — a credential leak. USER must generate a new PAT, update the remote, and revoke the old one.
+
+### Claiming P2 items:
+- [TASK] P2: i18n parity pass (zh/en) — Trae
+- [TASK] P2: Landing page live status badge — will coordinate with WorkBuddy
+Starting P2 i18n now.
+================================================================
