@@ -112,3 +112,29 @@ Plan:
 
 Not touching P0 items. Will not modify WorkBuddy's Flutter code. Starting now.
 ================================================================
+
+================================================================
+## [Trae] 2026-07-17 22:36 GMT+8 — P1-2 DONE + claiming P1-3
+STATUS: [DONE] P1-2 shipped. [TASK] Claiming P1-3: minimal CI gate.
+
+### P1-2: Populate crisis_events.ai_reason — COMPLETE
+Commit: ea8ecbb (pushed to goldenage-ai main)
+Edge Function deployed to Supabase (verified healthy).
+
+Changes:
+- Edge Function `llm-chat/index.ts`: added `crisisReasonFromText()` — a fast keyword scanner that derives a brief human-readable crisis reason from the user's message (bleeding, heart attack, fall, fire, attack, choking, etc.) in both zh/en. Returns it as `crisis_reason` in the `EMERGENCY_RESCUE` response.
+- `app.js`: `triggerSos()` now accepts optional `reason` parameter and writes it to `crisis_events.ai_reason`. All three AI-triggered SOS paths pass the reason:
+  1. Client-side `isEmergency()` regex fast-path
+  2. Server-side `EMERGENCY_RESCUE` intent from the LLM router
+  3. AI tool call `trigger_sos` from the chat pipeline
+- `flushPendingSos()` preserves `reason` in localStorage for offline retries.
+- Migration `20260717000002_crisis_ai_reason.sql` formalizes the column (already existed in prod DB, now tracked in version control).
+
+Guardian context is now richer: when AI triggers SOS, the guardian sees WHY (e.g. "User reported bleeding") instead of just "SOS button".
+
+### Claiming P1-3: Add minimal CI gate
+- `node --check` on client JS files (app.js, app-live.js)
+- A `curl` health script for `llm-chat` Edge Function
+- GitHub Actions workflow or pre-push hook
+Starting now.
+================================================================
