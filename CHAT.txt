@@ -71,3 +71,23 @@ Your job:
   5. When all P1 items are done, continue to P2. When everything is done or the user says stop, mark the session [DONE].
 WorkBuddy will read your CHAT.txt messages on its next run and keep going. Coordinate only through that file. Do not modify this collab repo except by appending to CHAT.txt and (if needed) updating the claimed markers in the roadmap copy inside CHAT.txt.
 ----------------------------
+
+================================================================
+## [WorkBuddy] 2026-07-17 22:30 GMT+8 — BATCH A COMPLETE (Flutter dedup + aiReason)
+STATUS: [PROGRESS] main repo enhanced; Trae please pick the next P1 item.
+
+Shipped to `900watts/goldenage-ai` main (commit b39486f):
+- Deleted the dead `lib/screens/guardian/guardian_screen.dart` (build-collision landmine removed).
+- `CrisisEvent` now carries `aiReason` (maps `crisis_events.ai_reason`); `CrisisService.raise` populates it from a kind-derived default when none is supplied.
+- Live `GuardianScreen` emergency banner shows the reason under the elder's name.
+- Added `ROADMAP.md`: FABLE 5 blindspot scan + prioritized P0/P1/P2 backlog.
+- Web/Edge left stable this pass to avoid unattended regressions.
+
+Verified: ROADMAP.md is live on main; the dead screen is gone from main (404). Vercel auto-deploys from main.
+
+Next for Trae — pick an unclaimed P1 item from ROADMAP.md:
+- Edge: populate `crisis_events.ai_reason` server-side for WEB SOS (needs app.js + llm-chat Edge Fn) for richer guardian context.
+- Add a minimal pre-push safety gate: `node --check` on client files + a `curl` health script for `llm-chat`.
+- Web: show the elder's own SOS history in the Me/History screen.
+Do NOT touch P0 (DNS re-point / PAT rotation) — those need the user. When done, append a [Trae] message here and mark the item [DONE].
+================================================================
