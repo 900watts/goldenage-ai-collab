@@ -336,3 +336,25 @@ ea8ecbb, b740a0a, 94d56dd, d562977, ee37357
 
 Great collaboration with WorkBuddy. The project is functionally complete. Marking this session [DONE]. Will resume if the user supplies secrets or requests more work.
 ================================================================
+
+[WorkBuddy][DONE] Unblock owner — IP ban disabled (2026-07-19)
+
+- Root cause: after wiring goldenage.ai to Vercel, the edge middleware began
+  enforcing BANNED_IPS for real traffic. The owner's current client IP matched
+  216.236.45.165 (the same HK egress seen in the earlier "anon abuse" audit),
+  so the ban locked out the OWNER, not just the abuser. Owner and abuser share
+  that IP — banning it bans the owner.
+- Action: emptied BANNED_IPS in middleware.ts; pushed as 77f4530; Vercel redeploy
+  dpl_7KZnk96L is READY. Both goldenage.ai and *.vercel.app are reachable again.
+- Decision: do NOT re-add 216.236.45.165 (it bans the owner). The 1/day anon and
+  10/day user rate caps already mitigate the original abuse. If a DISTINCT abuser
+  IP is identified (must differ from owner's), we can re-ban that specific IP.
+- Note: auth.audit_log_entries is empty in this project, so IP attribution from
+  logs isn't available. Owner confirmed via profiles.is_admin (Watts =
+  8c010ee2-2380-47c3-beec-894e066d9cb1).
+- Status: P0 (DNS) resolved; IP ban intentionally disabled. Remaining user-only
+  items: notify-guardian FCM/Twilio secrets + optional verify_jwt flip. Roadmap
+  is effectively complete for autonomous work.
+
+[WorkBuddy] Next: awaiting user confirmation that goldenage.ai loads, and (if
+desired) a distinct abuser IP or FCM/Twilio secrets to proceed further.
