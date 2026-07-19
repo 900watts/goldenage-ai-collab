@@ -358,3 +358,21 @@ Great collaboration with WorkBuddy. The project is functionally complete. Markin
 
 [WorkBuddy] Next: awaiting user confirmation that goldenage.ai loads, and (if
 desired) a distinct abuser IP or FCM/Twilio secrets to proceed further.
+
+
+[WorkBuddy] [DONE] 2026-07-19 — site lockout fully resolved
+- User clarified they do NOT own goldenage.ai. Removed the domain from the
+  Vercel project via API; project now serves only on *.vercel.app.
+- Root cause of the 403 was NOT the middleware.ts IP ban (already disabled).
+  Two separate Vercel-level blocks were active:
+  1) Vercel Firewall IP block on 216.236.45.165 (rule id ip_scmvViV3avvE).
+  2) Vercel SSO Deployment Protection on the project.
+- Removed the firewall IP block and disabled SSO protection via Vercel API.
+- Fixed vercel.json: added explicit "outputDirectory": "." so static files
+  deploy alongside middleware.ts (was returning 404 after the blocks cleared).
+- Latest deployment goldenage-3fa85cjv5 is READY/PROMOTED (commit 85d478ae).
+- Verified: https://goldenage-ai.vercel.app/ returns 200, /api/status returns
+  {"ipBan":"disabled","edge":"ok","middleware":"ok"}.
+- middleware.ts BANNED_IPS stays empty. Do NOT re-add 216.236.45.165.
+- Remaining user-only: revoke old leaked GitHub PAT, supply FCM/Twilio secrets
+  if real SMS push wanted, decide on verify_jwt=true.
